@@ -1,4 +1,4 @@
-# Temporizador ESP32-C3 com RTC e Relé
+# Plano de Desenvolvimento — Temporizador ESP32-C3 com RTC e Relé
 
 ## Visão Geral do Projeto
 
@@ -34,11 +34,9 @@ Sistema embarcado baseado em **ESP32-C3 Super Mini** que controla um relé segui
 ### Relé → ESP32-C3
 | Pino Relé | GPIO ESP32 | Observação |
 |---|---|---|
-| IN | GPIO0 | ⚠️ Strapping pin — ver nota abaixo |
+| IN | GPIO3 | Pino seguro, sem função de strapping |
 | VCC | 5V | Alimentação da bobina |
 | GND | GND | Terra comum |
-
-> ⚠️ **Atenção GPIO0:** No ESP32-C3, o GPIO0 é um *strapping pin* verificado durante o boot. Se o módulo de relé mantiver o pino em nível LOW no momento da inicialização, o ESP32 pode entrar em modo de gravação. Recomenda-se usar um relé com lógica ativa em HIGH (aciona com HIGH), ou migrar para **GPIO3** ou **GPIO7** caso ocorram problemas de boot.
 
 ---
 
@@ -120,7 +118,7 @@ extra_scripts = pre:upload_fs.py  ; opcional — ou usar: pio run --target uploa
 #define PIN_RTC_CLK   4
 #define PIN_RTC_DAT   5
 #define PIN_RTC_RST   6
-#define PIN_RELAY     0   // Considere migrar para GPIO3 ou GPIO7
+#define PIN_RELAY     3
 
 #define CONFIG_FILE   "/config.json"
 ```
@@ -326,8 +324,7 @@ A página `index.html` servida pela SPIFFS terá as seguintes seções:
 - Criar projeto no PlatformIO com o `platformio.ini` definido.
 - Instalar bibliotecas.
 - Testar comunicação com o DS1302 (leitura de horário via Serial).
-- Testar acionamento do relé.
-- Verificar comportamento do GPIO0 no boot.
+- Testar acionamento do relé (GPIO3).
 
 ### Etapa 2 — Módulo de Armazenamento (SPIFFS)
 - Implementar `storage_manager` com leitura e escrita do `config.json`.
